@@ -19,7 +19,12 @@ def rotates(a, b)
 end
   
 gets.to_i.times do |i|
+  i += 1
   a, b = gets.chomp.split.map(&:to_i)
-  sum = (a...b).map{|j|rotates(j,b)}.reduce(:+)
+  if a == b
+    sum = 0
+  else
+    sum = (a...b).map{|j|rotates(j,b)}.reduce(:+)
+  end
   puts "Case ##{i}: #{sum}"
 end
