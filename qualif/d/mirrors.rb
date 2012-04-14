@@ -33,12 +33,10 @@ class Hall
     m2 = m * m
     r = []
     if n <= m
-      r << [0, n]
       r << [n, 0]
     end
     (1..n-1).each do |i|
       next unless i*i + n2 <= m2
-      r << [i, n]
       r << [n, i]
     end
     r << [n, n] if n2 + n2 <= m2
@@ -90,7 +88,7 @@ class Hall
     [r, d]
   end
 
-  def trace(ca, dir)
+  def trace1(ca, dir)
     dx, dy = dir
     mx = @sx
     my = @sy
@@ -132,28 +130,37 @@ class Hall
     getc(mx, my) == "X"
   end
 
-  def traces
-    r = []
-    distances(@d).each do |dx, dy|
-      ca, dirs = crossings(dx, dy)
-      dirs.each do |j|
-        if trace(ca, j)
-          indep = false
-          ax = dx*j[0]
-          ay = dy*j[1]
-          aa = ax*ax+ay*ay
-          r.each do |bx, by|
-            prod = ax*bx+ay*by
-            if prod > 0 && prod*prod == aa*(bx*bx+by*by)
-              indep = true
-              break
-            end
+  def trace2(ca, dirs, dx, dy)
+    dirs.each do |sx, sy|
+      if trace1(ca, [sx, sy])
+        indep = false
+        ax = dx*sx
+        ay = dy*sy
+        aa = ax*ax+ay*ay
+        @r.each do |bx, by|
+          prod = ax*bx+ay*by
+          if prod > 0 && prod*prod == aa*(bx*bx+by*by)
+            indep = true
+            break
           end
-          r << [ax, ay] unless indep
         end
+        @r << [ax, ay] unless indep
       end
     end
-    r
+  end
+
+  def traces
+    @r = []
+    distances(@d).each do |dx, dy|
+      ca0, dirs0 = crossings(dx, dy)
+      trace2(ca0, dirs0, dx, dy)
+      unless dx == dy
+        ca1 = ca0.map(&:reverse)
+        dirs1 = dirs0.map(&:reverse)
+        trace2(ca1, dirs1, dy, dx)
+      end
+    end
+    @r
   end
 
 end
