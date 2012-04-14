@@ -28,25 +28,15 @@ class Hall
     end
   end
 
-  def distance(n, m)
-    n2 = n * n
-    m2 = m * m
-    r = []
-    if n <= m
-      r << [n, 0]
-    end
-    (1..n-1).each do |i|
-      next unless i*i + n2 <= m2
-      r << [n, i]
-    end
-    r << [n, n] if n2 + n2 <= m2
-    r
-  end
-
   def distances(m)
+    mm = m * m
     r = []
-    (1..m).each do |i|
-      r += distance(i, m)
+    (1..m).each do |n|
+      nn = n * n
+      (0..n).each do |i|
+        break unless i*i + nn <= mm
+        r << [n, i]
+      end
     end
     r
   end
