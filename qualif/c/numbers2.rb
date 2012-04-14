@@ -16,10 +16,8 @@ gets.to_i.times do |i|
   a, b = gets.chomp.split.map(&:to_i)
   w = b.to_s.length
   sum = 0
-  if a < b
-    (a...b).each do |j|
-      sum += rotates(j, b, w)
-    end
+  (a...b).each do |j|
+    sum += rotates(j, b, w)
   end
   puts "Case ##{i}: #{sum}"
 end
