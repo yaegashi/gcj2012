@@ -13,6 +13,7 @@ scan(int N, int *reqs)
         int count = 0, score = 0;
         int rates[N];
         memset(rates, 0, sizeof(rates));
+
 try2:
         do {
                 done = true;
@@ -33,7 +34,6 @@ try2:
                         return count;
         } while (!done);
 
-try1:
         for (int i = 0; i < N; i++) {
                 int *req = reqs + i*2;
                 if (rates[i] < 1 && req[0] <= score) {
@@ -45,6 +45,15 @@ try1:
         }
 
         return -1;
+}
+
+
+int
+cmp(const void *a, const void *b)
+{
+        const int *x = reinterpret_cast<const int *>(a);
+        const int *y = reinterpret_cast<const int *>(b);
+        return y[1] - x[1];
 }
 
 
@@ -75,6 +84,12 @@ main(int argc, char **argv)
                         ss >> reqs[j*2+0] >> reqs[j*2+1];
                 }
 
+                qsort(reqs, N, 2*sizeof(int), cmp);
+
+                cerr << "#" << i+1 << endl;
+                for (int j = 0; j < N; j++) 
+                        cerr << reqs[j*2+0] << " " << reqs[j*2+1] << endl;
+
                 int count = scan(N, reqs);
 
                 cout << "Case #" << i+1 << ": ";
@@ -83,9 +98,6 @@ main(int argc, char **argv)
                 else
                         cout << count;
                 cout << endl;
-
-                for (int j = 0; j < N; j++) 
-                        cerr << reqs[j*2+0] << " " << reqs[j*2+1] << endl;
 
         }
 
