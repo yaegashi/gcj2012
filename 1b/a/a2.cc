@@ -52,6 +52,8 @@ main(int argc, char **argv)
                                 int final = s+p*X;
                                 if (final < rest[k-1])
                                         continue;
+                                if (p < 0.0 || p > 1.0)
+                                        continue;
                                 min = min < p ? min : p;
                         }
                         cout << " " << showpoint << min*100.0;
